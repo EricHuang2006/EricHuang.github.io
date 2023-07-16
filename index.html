@@ -176,7 +176,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-07-15 13:03:01" itemprop="dateModified" datetime="2023-07-15T13:03:01+08:00">2023-07-15</time>
+                <time title="Modified: 2023-07-16 13:15:32" itemprop="dateModified" datetime="2023-07-16T13:15:32+08:00">2023-07-16</time>
               </span>
 
           
@@ -198,7 +198,7 @@
 <h3 id="Number-of-different-substrings"><a href="#Number-of-different-substrings" class="headerlink" title="Number of different substrings"></a>Number of different substrings</h3><blockquote>
 <p>Given a string $S$. You want to compute the number of different substrings. <br></p>
 </blockquote>
-<p>This can be computed by doing dp on the suffix automaton. However, there is a better way to compute this. <br><br>We can take advantage of the fact that each state $v$ matches to substrings of length $[minlen(v), len(v)]$. Given $minlen(v)&#x3D;1+len(link(v))$, we have total distinct substrings at state $v$ being<br>\begin{align*}<br>len(v)-minlen(v)+1&#x3D;len(v)-(1+len(link(v)))+1&#x3D;len(v)-len(link(v)).<br>\end{align*}<br>The computation is demonstrated succinctly below:</p>
+<p>This can be computed by doing dp on the suffix automaton. However, there is a better way to compute this. <br> We can take advantage of the fact that each state $v$ matches to substrings of length $[minlen(v), len(v)]$. Given $minlen(v)&#x3D;1+len(link(v))$, we have total distinct substrings at state $v$ being<br>\begin{align*}<br>len(v)-minlen(v)+1&#x3D;len(v)-(1+len(link(v)))+1&#x3D;len(v)-len(link(v)).<br>\end{align*}<br>The computation is demonstrated succinctly below:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ll <span class="title">get_diff_strings</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ll tot = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; sz; i++)&#123;</span><br><span class="line">        tot += st[i].len - st[st[i].link].len;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Total-length-of-all-different-substrings"><a href="#Total-length-of-all-different-substrings" class="headerlink" title="Total length of all different substrings"></a>Total length of all different substrings</h3><blockquote>
 <p>Given a string $S$. We want to compute the total length of all its various substrings. <br></p>
@@ -214,7 +214,7 @@
 <h3 id="Smallest-cyclic-shift"><a href="#Smallest-cyclic-shift" class="headerlink" title="Smallest cyclic shift"></a>Smallest cyclic shift</h3><blockquote>
 <p>Given a string $S$. We want to find the lexicographically smallest cyclic shift. <br></p>
 </blockquote>
-<p>A classical problem that can be done by constructing a suffix array. We will see how we can trivally find the smallest cyclic shift by suffix automaton. <br><br>We construct a suffix automaton for the string $S+S$ The the automaton will contain in itself as paths all the cyclic shifts of the string $S$. <br><br>From here, the problem is reduced to finding the lexicographically smallest path of length $|S|$. We simply start in the initial state and greedily pass through the transitions with the minimal character. <br><br>Total time complexity is $O(|S|)$.</p>
+<p>A classical problem that can be done by constructing a suffix array. We will see how we can trivally find the smallest cyclic shift by suffix automaton. <br> We construct a suffix automaton for the string $S+S$. Then the automaton will contain in itself as paths all the cyclic shifts of the string $S$. <br><br>From here, the problem is reduced to finding the lexicographically smallest path of length $|S|$. We simply start in the initial state and greedily pass through the transitions with the minimal character. <br><br>Total time complexity is $O(|S|)$.</p>
 <h3 id="Number-of-Occurences"><a href="#Number-of-Occurences" class="headerlink" title="Number of Occurences"></a>Number of Occurences</h3><blockquote>
 <p>For a given text $T$, answer multiple queries. For each given string $P$ find out the number of times $P$ appears in the string $T$ as a substring. <br></p>
 </blockquote>
