@@ -145,6 +145,70 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/07/Game/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Phoenix0423">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/07/Game/" class="post-title-link" itemprop="url">CSES - Letter Pair Move Game</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-07 13:29:57 / Modified: 14:05:01" itemprop="dateCreated datePublished" datetime="2023-10-07T13:29:57+08:00">2023-10-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://cses.fi/problemset/task/2427">連結</a></p>
+<p>首先，$n &#x3D; 2$ 的 Case 怎麼移都沒用，先特判掉 <br><br>先把字串移成 $XXX..B$ 的形式(因為若字串為 $….BA$ ，會發現最後一個 $A$ 不好處理) <br><br>假設現在的字串是 $ABA..B$ <br><br>我們要做的事是不斷把第一個出現的 $B$ 以一個 $A$ 取代，直到所有的 $A$ 都在 $B$ 之前 <br><br>作法是先將 $..$ 移到第一個出現的 $B$ 出現的位置：$A..BAB$ <br><br>再將 $..$ 與它後面的第一個 $A$ 做交換：$AABB..$ <br><br>這一步可能會破壞 $XXX..B$ 的結構，但如過破壞了就說明已經做完了，直接退出就好 <br><br>最後要將 $..$ 復原到 $n-2$ 的位置 <br><br>這一步唯一無法執行的情況為： $AB..AB$，因為要移動的話會用到前面建構好的 $A$ 的序列 <br><br>如果 $n &#x3D; 3$ 無解，最後一定會移成這個模樣，而 $n \geq 4$ 一定有解 <br><br>操作次數會是 $3n$ 到 $4n$ <br></p>
+<p>還有這題測資很弱，我先前寫的假解也AC了(這篇應該不是假解了…吧)，建議自己證證看自己的解是否正確</p>
+<p>Code：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; pll;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> fastio ios::sync_with_stdio(false), cin.tie(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> pb push_back</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eb emplace_back</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> f first</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> s second</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span>&#123;</span><br><span class="line">	fastio;</span><br><span class="line">	<span class="type">int</span> n;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	n *= <span class="number">2</span>;</span><br><span class="line">	string s;</span><br><span class="line">	cin&gt;&gt;s;</span><br><span class="line">	<span class="type">int</span> empt;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) <span class="keyword">if</span>(s[i] == <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">		empt = i;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	vector&lt;string&gt; ans;</span><br><span class="line">	<span class="keyword">auto</span> ck = [&amp;]() -&gt; <span class="type">bool</span>&#123;</span><br><span class="line">		<span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(s[i] == <span class="string">&#x27;B&#x27;</span>) b = <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span>(s[i] == <span class="string">&#x27;A&#x27;</span> &amp;&amp; b) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">auto</span> move_empt = [&amp;](<span class="type">int</span> nw)&#123;</span><br><span class="line">		<span class="built_in">swap</span>(s[empt], s[nw]);</span><br><span class="line">		<span class="built_in">swap</span>(s[empt + <span class="number">1</span>], s[nw + <span class="number">1</span>]);</span><br><span class="line">		empt = nw;</span><br><span class="line">		ans.<span class="built_in">pb</span>(s);</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">if</span>(n == <span class="number">4</span>)&#123;</span><br><span class="line">		cout&lt;&lt;(<span class="built_in">ck</span>() ? <span class="number">0</span> : <span class="number">-1</span>)&lt;&lt;<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(empt &gt; <span class="number">1</span>) <span class="built_in">move_empt</span>(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span>(empt &lt; n - <span class="number">3</span>) <span class="built_in">move_empt</span>(n - <span class="number">2</span>);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n - <span class="number">2</span>; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(s[i] == <span class="string">&#x27;B&#x27;</span>)&#123;</span><br><span class="line">			<span class="built_in">move_empt</span>(i - <span class="number">1</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(empt &gt; <span class="number">1</span>) <span class="built_in">move_empt</span>(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span>(empt &lt; n - <span class="number">4</span>) <span class="built_in">move_empt</span>(n - <span class="number">3</span>);</span><br><span class="line">	<span class="type">int</span> bad = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n / <span class="number">2</span> - <span class="number">1</span>; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(s[i] == <span class="string">&#x27;A&#x27;</span>) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="built_in">move_empt</span>(i);</span><br><span class="line">		<span class="type">int</span> id = i;</span><br><span class="line">		<span class="keyword">for</span>(; id &lt; n - <span class="number">1</span>; id++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(s[id] == <span class="string">&#x27;A&#x27;</span>) <span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">move_empt</span>(id);</span><br><span class="line">		<span class="keyword">if</span>(id == n - <span class="number">2</span> || <span class="built_in">ck</span>()) <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">if</span>(empt &gt; i + <span class="number">2</span>) <span class="built_in">move_empt</span>(i + <span class="number">1</span>);</span><br><span class="line">		<span class="keyword">if</span>(empt &lt; n - <span class="number">4</span>) <span class="built_in">move_empt</span>(n - <span class="number">3</span>);</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			bad = <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(bad) cout&lt;&lt;<span class="number">-1</span>&lt;&lt;<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		cout&lt;&lt;ans.<span class="built_in">size</span>()&lt;&lt;<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">auto</span> x : ans) cout&lt;&lt;x&lt;&lt;<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/14/%E5%BE%8C%E7%B6%B4%E8%87%AA%E5%8B%95%E6%A9%9F(Suffix%20Automaton)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -377,7 +441,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-13 16:43:48" itemprop="dateModified" datetime="2023-08-13T16:43:48+08:00">2023-08-13</time>
+                <time title="Modified: 2023-09-12 22:05:00" itemprop="dateModified" datetime="2023-09-12T22:05:00+08:00">2023-09-12</time>
               </span>
 
           
@@ -392,7 +456,7 @@
 
       
           <h2 id="四邊形優化"><a href="#四邊形優化" class="headerlink" title="四邊形優化"></a>四邊形優化</h2><p>四邊形優化好難…</p>
-<h3 id="決策單調性"><a href="#決策單調性" class="headerlink" title="決策單調性"></a>決策單調性</h3><p>假設一開始我們只有 $f(0) &#x3D; 0$ ，那們所有點的最佳轉移點都會是 $0$ : <br><br><font color="#ffa500">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</font><br>現在，顯然 $f(1)$ 的值已經確定了 - 它的最佳轉移點只能是 $1$ 。我們用新的轉移點 $2$ 來更新這張最佳轉移點的表，會長這樣：<nr><br><font color="#ffa500">0 0 0 0 0 0 </font><font color="#FF6600">1 1 1 1 1 1 1 1 1 1 1 1</font><br>意思是，只要有一個點 $i$ 使用 $1$ 轉移優於使用 $0$ 轉移，那麼對於所有 $j &gt; i$ 都不可能用 $0$轉移。<br><br>這意味著我們可以用二分搜來找最佳轉移點改變的「轉折點」。<br>再看一個，現在 $f(2)$ 的最佳轉移點也已經確定，用決策 $2$ 來更新會有兩種情況：<br><br><font color="#ffa500">0 0 0 0 0 0 </font><font color="#FF6600">1 1 1 1 1 1 </font><font color="#1e90ff">2 2 2 2 2 2</font><br><font color="#ffa500">0 0 0 0 </font><font color="#1e90ff">2 2 2 2 2 2 2 2 2 2 2 2 2 2</font><br>而這樣的轉移點表示是不會出現的：<br><font color="#ffa500">0 0 0 0 </font><font color="#1e90ff">2 2 2 2 2 2 2 2 </font><font color="#FF6600">1 1 1 1 1 1 </font><br>因為它違反了決策單調性。 <br></nr></p>
+<h3 id="決策單調性"><a href="#決策單調性" class="headerlink" title="決策單調性"></a>決策單調性</h3><p>假設一開始我們只有 $f(0) &#x3D; 0$ ，那們所有點的最佳轉移點都會是 $0$ : <br><br><font color="#ffa500">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</font><br>現在，顯然 $f(1)$ 的值已經確定了 - 它的最佳轉移點只能是 $0$ 。我們用新的轉移點 $1$ 來更新這張最佳轉移點的表，會長這樣：<nr><br><font color="#ffa500">0 0 0 0 0 0 </font><font color="#FF6600">1 1 1 1 1 1 1 1 1 1 1 1</font><br>意思是，只要有一個點 $i$ 使用 $1$ 轉移優於使用 $0$ 轉移，那麼對於所有 $j &gt; i$ 都不可能用 $0$轉移。<br><br>這意味著我們可以用二分搜來找最佳轉移點改變的「轉折點」。<br>再看一個，現在 $f(2)$ 的最佳轉移點也已經確定，用決策 $2$ 來更新會有兩種情況：<br><br><font color="#ffa500">0 0 0 0 0 0 </font><font color="#FF6600">1 1 1 1 1 1 </font><font color="#1e90ff">2 2 2 2 2 2</font><br><font color="#ffa500">0 0 0 0 </font><font color="#1e90ff">2 2 2 2 2 2 2 2 2 2 2 2 2 2</font><br>而這樣的轉移點表示是不會出現的：<br><font color="#ffa500">0 0 0 0 </font><font color="#1e90ff">2 2 2 2 2 2 2 2 </font><font color="#FF6600">1 1 1 1 1 1 </font><br>因為它違反了決策單調性。 <br></nr></p>
 <h4 id="作法"><a href="#作法" class="headerlink" title="作法"></a>作法</h4><p>依上面論述，我們要做的便是維護每個轉移點它是最佳轉移點的區間。我們可以使用一個stack維護數據，在新加入一個決策時：</p>
 <ol>
 <li>如果在舊決策的起點處還是新決策好，則將其全部拋棄(退出棧)，繼續掃描下一個決策。</li>
@@ -561,12 +625,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
